@@ -1,14 +1,19 @@
 import express from "express";
 
-import { loginUser } from "../controllers/login";
-import { registrateUser } from "../controllers/registrate";
+import { loginUser } from "../controllers/auth/login";
+import { registrateUser } from "../controllers/auth/registrate";
 import { validateSchema } from "../middlewares/validateSchema";
-import { userSchema } from "../schemas/userSchema";
+import { authLoginSchema } from "../schemas/authLoginSchema";
+import { authRegistrationSchema } from "../schemas/authRegistrationSchema";
 
 const authRouter = express.Router();
 
-authRouter.post("/registration", validateSchema(userSchema), registrateUser);
+authRouter.post(
+  "/registration",
+  validateSchema(authRegistrationSchema),
+  registrateUser
+);
 
-authRouter.get("/login", loginUser);
+authRouter.get("/login", validateSchema(authLoginSchema), loginUser);
 
 export default authRouter;

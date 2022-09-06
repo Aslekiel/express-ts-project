@@ -1,8 +1,13 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AppDataSource } from "../DataSource";
-import { User } from "../entity/User";
-import { generateAccessToken, getError } from "../utils/utils";
+import { AppDataSource } from "../../DataSource";
+import { User } from "../../entity/User";
+import {
+  CustomError,
+  generateAccessToken,
+  getError,
+  getHashedPassword,
+} from "../../utils/utils";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -12,8 +17,11 @@ export const loginUser = async function (
   next: NextFunction
 ) {
   try {
+    const hashedPassword = getHashedPassword(req.body.password);
+
     const email: string = req.body.email;
-    const password: string = req.body.password;
+    const password: string = hashedPassword;
+    const id: string = req.body.id;
 
     const currentUser = await userRepository.findOneBy({
       email: email,
@@ -27,7 +35,7 @@ export const loginUser = async function (
       );
     }
 
-    const accessToken = generateAccessToken(email, password, "1800s");
+    const accessToken = generateAccessToken(id, "1800s");
 
     res.json({
       accessToken,

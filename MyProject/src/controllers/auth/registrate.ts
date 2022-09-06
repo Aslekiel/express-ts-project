@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AppDataSource } from "../DataSource";
-import { User } from "../entity/User";
-import { getError } from "../utils/utils";
+import { AppDataSource } from "../../DataSource";
+import { User } from "../../entity/User";
+import { getError, getHashedPassword } from "../../utils/utils";
 
 const userRepository = AppDataSource.getRepository(User);
 
@@ -22,11 +22,13 @@ export const registrateUser = async function (
       );
     }
 
+    const hashedPassword = getHashedPassword(req.body.password);
+
     const user = new User();
     user.name = req.body.name;
     user.lastname = req.body.lastname;
     user.email = req.body.email;
-    user.password = req.body.password;
+    user.password = hashedPassword;
     user.dob = req.body.dob;
 
     res.json(await userRepository.save(user));

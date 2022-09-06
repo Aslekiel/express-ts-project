@@ -5,18 +5,18 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ type: "varchar", length: 20 })
   name: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 30 })
   lastname: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 20 })
   email: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 50 })
   password: string;
 
-  @Column()
+  @Column({ type: "varchar", length: 20 })
   dob: string;
 }
