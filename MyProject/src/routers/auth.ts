@@ -8,12 +8,8 @@ import { authRegistrationSchema } from "../schemas/authRegistrationSchema";
 
 const authRouter = express.Router();
 
-authRouter.post(
-  "/registration",
-  validateSchema(authRegistrationSchema),
-  registrateUser
-);
+authRouter.post("/registration", validateSchema(authRegistrationSchema), registrateUser);
 
-authRouter.get("/login", validateSchema(authLoginSchema), loginUser);
+authRouter.post("/login", validateSchema(authLoginSchema), loginUser);
 
 export default authRouter;

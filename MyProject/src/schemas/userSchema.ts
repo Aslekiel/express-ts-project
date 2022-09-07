@@ -1,5 +1,6 @@
 import * as yup from "yup";
+import { SchemaObjectItemType } from "../middlewares/validateSchema";
 
-export const userSchema = yup.object().shape({
-  params: yup.object().shape({ id: yup.number().required() }),
-});
+export const userSchema: SchemaObjectItemType = {
+  params: { id: yup.number().required() }
+};

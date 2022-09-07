@@ -1,41 +1,41 @@
-import { NextFunction, Request, Response } from "express";
+import { RequestHandler } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AppDataSource } from "../../DataSource";
-import { User } from "../../entity/User";
-import {
-  CustomError,
-  generateAccessToken,
-  getError,
-  getHashedPassword,
-} from "../../utils/utils";
+import db from "../../db";
+import { generateAccessToken } from "../../utils/generateAccessToken";
+import { getError } from "../../utils/getCustomError";
+import { getHashedPassword } from "../../utils/hashPassword";
 
-const userRepository = AppDataSource.getRepository(User);
+type ParamsType = Record<string, never>;
 
-export const loginUser = async function (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+type QueryType = Record<string, never>;
+
+type BodyType = {
+  email: string;
+  password: string;
+};
+
+type ResponseType = {
+  accessToken: string;
+};
+
+type ControllerType = RequestHandler<ParamsType, ResponseType, BodyType, QueryType>;
+
+export const loginUser: ControllerType = async (req, res, next) => {
   try {
-    const hashedPassword = getHashedPassword(req.body.password);
+    const password = getHashedPassword(req.body.password);
 
-    const email: string = req.body.email;
-    const password: string = hashedPassword;
-    const id: string = req.body.id;
+    const { email } = req.body;
 
-    const currentUser = await userRepository.findOneBy({
-      email: email,
-      password: password,
+    const currentUser = await db.userRepository.findOneBy({
+      email,
+      password,
     });
 
     if (!currentUser) {
-      throw getError(
-        StatusCodes.FORBIDDEN,
-        "Login or password entered incorrectly!"
-      );
+      throw getError(StatusCodes.FORBIDDEN, process.env.LOGIN_ERR);
     }
 
-    const accessToken = generateAccessToken(id, "1800s");
+    const accessToken = generateAccessToken(currentUser.id, "1800s");
 
     res.json({
       accessToken,

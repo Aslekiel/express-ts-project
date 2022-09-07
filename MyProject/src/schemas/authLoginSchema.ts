@@ -1,11 +1,10 @@
 import * as yup from "yup";
+import { SchemaObjectItemType } from "../middlewares/validateSchema";
 
-export const authLoginSchema = yup.object().shape({
-  body: yup.object().shape({
+export const authLoginSchema: SchemaObjectItemType = {
+  body: {
     email: yup.string().email("Invalid email").required(),
-    password: yup
-      .string()
-      .required()
-      .min(5, "Password must be at least 5 characters"),
-  }),
-});
+    password: yup.string().required().min(5, "Password must be at least 5 characters"),
+  },
+
+}

@@ -1,29 +1,15 @@
-import express from "express";
-import dotenv from "dotenv";
-import bodyParser from "body-parser";
+import { AppDataSource } from "./db/DataSource";
+import app from "./app";
+import config from "./config";
+import types from "./types";
 
-import { AppDataSource } from "./DataSource";
-import authRouter from "./routers/auth";
-import userRouter from "./routers/user";
-import { errorHandler } from "./errorHandler/errorHandler";
 
-const urlencodedParser = bodyParser.urlencoded({ extended: false });
-const PORT = 3000;
+(async () => {
 
-dotenv.config();
+  await AppDataSource.initialize().catch((error) => console.log(error))
 
-AppDataSource.initialize()
-  .then(async () => {
-    const app = express();
+  app.listen(config.port, () => {
+    console.log("Server start");
+  });
 
-    app.use(urlencodedParser);
-    app.use("/api", authRouter);
-    app.use("/api", userRouter);
-
-    app.use(errorHandler);
-
-    app.listen(PORT, () => {
-      console.log("Server start");
-    });
-  })
-  .catch((error) => console.log(error));
+})()

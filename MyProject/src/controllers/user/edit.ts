@@ -1,10 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AppDataSource } from "../../DataSource";
-import { User } from "../../entity/User";
-import { getError } from "../../utils/utils";
-
-const userRepository = AppDataSource.getRepository(User);
+import db from "../../db";
+import { getError } from "../../utils/getCustomError";
 
 export const editUser = async function (
   req: Request,
@@ -12,19 +9,21 @@ export const editUser = async function (
   next: NextFunction
 ) {
   try {
-    const foundUser = await userRepository.findOneBy({ id: req.body.id });
+    const id = req.user.id;
+
+    const foundUser = await db.userRepository.findOneBy({ id: +id });
 
     if (!foundUser) {
-      throw getError(StatusCodes.BAD_REQUEST, "No such user found!");
+      throw getError(StatusCodes.BAD_REQUEST, process.env.NO_USER);
     }
 
-    foundUser.name = req.body.name;
-    foundUser.lastname = req.body.lastname;
-    foundUser.email = req.body.email;
-    foundUser.password = req.body.password;
-    foundUser.dob = req.body.dob;
+    foundUser.name = req.user.name;
+    foundUser.lastname = req.user.lastname;
+    foundUser.email = req.user.email;
+    foundUser.password = req.user.password;
+    foundUser.dob = req.user.dob;
 
-    const editUser = await userRepository.save(foundUser);
+    const editUser = await db.userRepository.save(foundUser);
 
     res.json(editUser);
   } catch (error) {

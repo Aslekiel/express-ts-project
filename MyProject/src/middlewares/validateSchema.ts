@@ -1,21 +1,23 @@
-import { NextFunction, Request, Response } from "express";
-import { authLoginSchema } from "../schemas/authLoginSchema";
-import { authRegistrationSchema } from "../schemas/authRegistrationSchema";
-import { userSchema } from "../schemas/userSchema";
+import { Handler } from "express";
+import * as yup from "yup";
 
-type SchemaType =
-  | typeof authRegistrationSchema
-  | typeof authLoginSchema
-  | typeof userSchema;
+export type SchemaItemType = Record<string, yup.StringSchema | yup.NumberSchema | yup.DateSchema>
 
-export const validateSchema =
-  (schema: SchemaType) =>
-  async (req: Request, res: Response, next: NextFunction) => {
+export type SchemaObjectItemType = Record<string, yup.StringSchema | yup.NumberSchema | yup.DateSchema>
+
+export type SchemaType = {
+  body?: SchemaObjectItemType;
+  params?: SchemaObjectItemType;
+  query?: SchemaObjectItemType;
+}
+
+export const validateSchema = (schema: SchemaType): Handler =>
+  async (req, res, next) => {
     try {
       await schema.validate(req, { abortEarly: false });
+
       return next();
     } catch (error) {
-      // next(error)
-      return res.status(500).json({ message: error.message });
+      next(error);
     }
   };

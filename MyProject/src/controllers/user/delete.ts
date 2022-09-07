@@ -1,10 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AppDataSource } from "../../DataSource";
-import { User } from "../../entity/User";
-import { getError } from "../../utils/utils";
-
-const userRepository = AppDataSource.getRepository(User);
+import db from "../../db";
+import { getError } from "../../utils/getCustomError";
 
 export const deleteUser = async function (
   req: Request,
@@ -12,14 +9,16 @@ export const deleteUser = async function (
   next: NextFunction
 ) {
   try {
-    const foundUser = await userRepository.findOneBy({ id: req.body.id });
+    const id = req.user.id;
+
+    const foundUser = await db.userRepository.findOneBy({ id: +id });
 
     if (!foundUser) {
-      throw getError(StatusCodes.BAD_REQUEST, "No such user found!");
+      throw getError(StatusCodes.BAD_REQUEST, process.env.NO_USER);
     }
 
-    const removeUser = await userRepository.remove(foundUser);
-    res.json(removeUser);
+    await db.userRepository.remove(foundUser);
+    res.sendStatus(StatusCodes.NO_CONTENT);
   } catch (error) {
     next(error);
   }

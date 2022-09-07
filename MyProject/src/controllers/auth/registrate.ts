@@ -1,38 +1,41 @@
-import { NextFunction, Request, Response } from "express";
+import { Handler } from "express";
 import { StatusCodes } from "http-status-codes";
-import { AppDataSource } from "../../DataSource";
-import { User } from "../../entity/User";
-import { getError, getHashedPassword } from "../../utils/utils";
+import config from "../../config";
+import db from "../../db";
+import { User } from "../../db/entity/User";
+import { getError } from "../../utils/getCustomError";
+import { getHashedPassword } from "../../utils/hashPassword";
 
-const userRepository = AppDataSource.getRepository(User);
 
-export const registrateUser = async function (
-  req: Request,
-  res: Response,
-  next: NextFunction
+export const registrateUser: Handler = async function (
+  req,
+  res,
+  next
 ) {
   try {
-    const registeredEmail = await userRepository.findOneBy({
+
+    const registeredEmail = await db.userRepository.findOneBy({
       email: req.body.email,
     });
+
     if (registeredEmail) {
-      throw getError(
-        StatusCodes.BAD_REQUEST,
-        "This email is already registered!"
-      );
+      throw getError(StatusCodes.BAD_REQUEST, config.errors.registration);
     }
 
     const hashedPassword = getHashedPassword(req.body.password);
 
     const user = new User();
+
     user.name = req.body.name;
     user.lastname = req.body.lastname;
     user.email = req.body.email;
     user.password = hashedPassword;
-    user.dob = req.body.dob;
+    user.dob = new Date(req.body.dob);
 
-    res.json(await userRepository.save(user));
+    const newUser = await db.userRepository.save(user)
+
+    res.json(newUser);
   } catch (error) {
-    next(error);
+    next(error)
   }
 };
