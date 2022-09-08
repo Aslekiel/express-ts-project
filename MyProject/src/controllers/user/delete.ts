@@ -1,20 +1,21 @@
-import { Handler } from "express";
-import { StatusCodes } from "http-status-codes";
-import db from "../../db";
-import { getError } from "../../utils/getCustomError";
+import type { Handler } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import config from '../../config';
+import db from '../../db';
+import { getError } from '../../utils/getCustomError';
 
-export const deleteUser: Handler = async function (req, res, next) {
+export const deleteUser: Handler = async (req, res, next) => {
   try {
-    const id = req.params.id;
+    const id = req.user.id;
 
     const foundUser = await db.userRepository.findOneBy({ id: +id });
 
     if (!foundUser) {
-      throw getError(StatusCodes.BAD_REQUEST, process.env.NO_USER);
+      throw getError(StatusCodes.BAD_REQUEST, config.errors.none_user_err);
     }
 
     await db.userRepository.remove(foundUser);
-    res.sendStatus(StatusCodes.NO_CONTENT);
+    return res.json('User has been deleted');
   } catch (error) {
     next(error);
   }

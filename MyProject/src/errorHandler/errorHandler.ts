@@ -1,23 +1,17 @@
-import { ErrorRequestHandler } from "express";
-import { StatusCodes } from "http-status-codes";
-import { CustomError } from "../utils/CustomError";
-import * as yup from "yup";
-import { getErrorsArray } from "../utils/createErrorsArray";
+import type { ErrorRequestHandler } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import config from '../config';
+import { CustomError } from '../utils/CustomError';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (err instanceof CustomError) {
     return res
       .status(err.localData.status)
-      .json({ message: err.localData.message });
-  }
-
-  if (err instanceof yup.ValidationError) {
-    return res
-      .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: getErrorsArray(err) });
+      .json({ message: err.localData.payload || err.localData.message });
   }
 
   return res
     .status(StatusCodes.INTERNAL_SERVER_ERROR)
-    .json({ message: process.env.SERVER_ERR });
+    .json({ message: config.errors.server_err });
 };

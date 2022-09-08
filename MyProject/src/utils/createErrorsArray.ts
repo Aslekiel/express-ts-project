@@ -1,4 +1,4 @@
-import * as yup from "yup";
+import type * as yup from 'yup';
 
 type ErrObjType = {
   path: string;
@@ -12,8 +12,8 @@ export const getErrorsArray = (err: yup.ValidationError) => {
 
   err.inner.forEach((item) => {
     const error: ErrObjType = {
-      path: item.path.split(".")[0],
-      fieldName: item.path.split(".")[1],
+      path: item.path.split('.')[0],
+      fieldName: item.path.split('.')[1],
       inputValue: item.value,
       message: item.message,
     };

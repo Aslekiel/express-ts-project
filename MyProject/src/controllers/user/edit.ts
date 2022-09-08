@@ -1,12 +1,12 @@
-import { Handler } from "express";
-import { StatusCodes } from "http-status-codes";
-import config from "../../config";
-import db from "../../db";
-import { getError } from "../../utils/getCustomError";
+import type { Handler } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import config from '../../config';
+import db from '../../db';
+import { getError } from '../../utils/getCustomError';
 
-export const editUser: Handler = async function (req, res, next) {
+export const editUser: Handler = async (req, res, next) => {
   try {
-    const id = req.params.id;
+    const id = req.user.id;
 
     const foundUser = await db.userRepository.findOneBy({ id: +id });
 
@@ -19,18 +19,20 @@ export const editUser: Handler = async function (req, res, next) {
     });
 
     if (registeredEmail) {
-      throw getError(StatusCodes.BAD_REQUEST, config.errors.registration);
+      throw getError(StatusCodes.BAD_REQUEST, config.errors.registration_err);
     }
 
-    foundUser.name = req.user.name;
-    foundUser.lastname = req.user.lastname;
-    foundUser.email = req.user.email;
-    foundUser.password = req.user.password;
+    foundUser.name = req.body.name;
+    foundUser.lastname = req.body.lastname;
+    foundUser.email = req.body.email;
+    foundUser.password = req.body.password;
     foundUser.dob = new Date(req.body.dob);
 
     const editUser = await db.userRepository.save(foundUser);
 
-    res.json({ editUser });
+    delete foundUser.password;
+
+    res.json(editUser);
   } catch (error) {
     next(error);
   }
