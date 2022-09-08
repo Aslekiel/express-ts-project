@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, Handler } from "express";
+import { Handler } from "express";
 import jwt from "jsonwebtoken";
 import { StatusCodes } from "http-status-codes";
 import { getError } from "../utils/getCustomError";

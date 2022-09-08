@@ -1,15 +1,11 @@
-import { NextFunction, Request, Response } from "express";
+import { Handler } from "express";
 import { StatusCodes } from "http-status-codes";
 import db from "../../db";
 import { getError } from "../../utils/getCustomError";
 
-export const deleteUser = async function (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
+export const deleteUser: Handler = async function (req, res, next) {
   try {
-    const id = req.user.id;
+    const id = req.params.id;
 
     const foundUser = await db.userRepository.findOneBy({ id: +id });
 

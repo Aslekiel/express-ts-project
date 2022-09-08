@@ -1,8 +1,6 @@
 import * as yup from "yup";
-import { SchemaObjectItemType } from "../middlewares/validateSchema";
 
-
-export const authRegistrationSchema: SchemaObjectItemType = {
+export const authRegistrationSchema = {
   body: {
     name: yup
       .string()
@@ -24,5 +22,3 @@ export const authRegistrationSchema: SchemaObjectItemType = {
       .max(new Date(), "Date of birth cannot be in the future"),
   },
 };
-
-

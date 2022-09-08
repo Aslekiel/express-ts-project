@@ -5,7 +5,7 @@ import config from "../config";
 export const AppDataSource = new DataSource({
   type: "postgres",
   host: config.host,
-  port: config.db.port,
+  port: +config.db.port,
   username: config.db.username,
   password: config.db.password,
   database: config.db.database,
@@ -13,3 +13,4 @@ export const AppDataSource = new DataSource({
   synchronize: true,
   logging: false,
 });
+

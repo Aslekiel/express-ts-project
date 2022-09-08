@@ -14,11 +14,10 @@ export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
   if (err instanceof yup.ValidationError) {
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
-      .json({ message: getErrorsArray(err) })
+      .json({ message: getErrorsArray(err) });
   }
 
   return res
     .status(StatusCodes.INTERNAL_SERVER_ERROR)
     .json({ message: process.env.SERVER_ERR });
-
 };
