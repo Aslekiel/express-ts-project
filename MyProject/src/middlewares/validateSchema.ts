@@ -17,7 +17,10 @@ export const validateSchema =
           };
         }, {} as Record<string, yup.ObjectSchema<SchemaItemType>>),
       );
-      await currentSchema.validate(req, { abortEarly: false });
+      await currentSchema.validate(
+        { body: req.body, params: req.params, query: req.query },
+        { abortEarly: false },
+      );
 
       return next();
     } catch (error) {

@@ -4,12 +4,10 @@ export const authRegistrationSchema = {
   body: {
     name: yup
       .string()
-      .matches(/^[a-z]+$/i, 'Name can only contain letters.')
-      .required('Firstname is a required field'),
+      .matches(/^[a-z]+$/i, 'Name can only contain letters.'),
     lastname: yup
       .string()
-      .matches(/^[a-z]+$/i, 'Lastname can only contain letters.')
-      .required('Lastname is a required field'),
+      .matches(/^[a-z]+$/i, 'Lastname can only contain letters.'),
     email: yup.string().email('Invalid email').required('Email is a required field'),
     password: yup
       .string()
