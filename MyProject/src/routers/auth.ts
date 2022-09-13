@@ -1,14 +1,15 @@
 import express from 'express';
 
 import { loginUser } from '../controllers/auth/login';
-import { registrateUser } from '../controllers/auth/registrate';
+import { signUpUser } from '../controllers/auth/signup';
+
 import { validateSchema } from '../middlewares/validateSchema';
 import { authLoginSchema } from '../schemas/authLoginSchema';
-import { authRegistrationSchema } from '../schemas/authRegistrationSchema';
+import { authSignUpSchema } from '../schemas/authSignUpSchema';
 
 const authRouter = express.Router();
 
-authRouter.post('/registration', validateSchema(authRegistrationSchema), registrateUser);
+authRouter.post('/signup', validateSchema(authSignUpSchema), signUpUser);
 
 authRouter.post('/login', validateSchema(authLoginSchema), loginUser);
 

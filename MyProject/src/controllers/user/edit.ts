@@ -22,11 +22,9 @@ export const editUser: Handler = async (req, res, next) => {
       throw getError(StatusCodes.BAD_REQUEST, config.errors.registration_err);
     }
 
-    foundUser.name = req.body.name;
-    foundUser.lastname = req.body.lastname;
+    foundUser.fullname = req.body.fullname;
     foundUser.email = req.body.email;
     foundUser.password = req.body.password;
-    foundUser.dob = new Date(req.body.dob);
 
     const editUser = await db.userRepository.save(foundUser);
 

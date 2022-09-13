@@ -12,12 +12,10 @@ import { getHashedPassword } from '../../utils/hashPassword';
 type ParamsType = Record<string, never>;
 type QueryType = Record<string, never>;
 type BodyType = {
-  name: string;
-  lastname: string;
   email: string;
   password: string;
-  dob: Date;
 };
+
 type ResponseType = {
   newUser: User;
   accessToken: string;
@@ -25,7 +23,7 @@ type ResponseType = {
 
 type ControllerType = RequestHandler<ParamsType, ResponseType, BodyType, QueryType>;
 
-export const registrateUser: ControllerType = async (req, res, next) => {
+export const signUpUser: ControllerType = async (req, res, next) => {
   try {
     const registeredEmail = await db.userRepository.findOneBy({
       email: req.body.email,
@@ -39,11 +37,8 @@ export const registrateUser: ControllerType = async (req, res, next) => {
 
     const user = new User();
 
-    user.name = req.body.name;
-    user.lastname = req.body.lastname;
     user.email = req.body.email;
     user.password = hashedPassword;
-    user.dob = new Date(req.body.dob);
 
     const newUser = await db.userRepository.save(user);
 

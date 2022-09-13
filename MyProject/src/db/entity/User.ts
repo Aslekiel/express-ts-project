@@ -6,17 +6,17 @@ export class User {
   id: number;
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
-  name: string;
-
-  @Column({ type: 'varchar', nullable: true, length: 255 })
-  lastname: string;
+  fullname: string;
 
   @Column({ type: 'varchar', nullable: false, length: 255, unique: true })
   email: string;
 
   @Column({ type: 'varchar', nullable: false, length: 255, select: false })
   password: string;
-
-  @Column({ type: 'date', nullable: true })
-  dob: string | Date;
 }
+
+// eslint-disable-next-line max-len
+// fullname: yup.string().test('is-full-name', 'Please enter both your first and last name', (value) => {
+//   const nameArr = value.split(' ');
+//   return nameArr.length >= 2;
+// }),
