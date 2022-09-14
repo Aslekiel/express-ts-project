@@ -14,7 +14,7 @@ type BodyType = {
   password: string;
 };
 type ResponseType = {
-  currentUser: User;
+  user: User;
   accessToken: string;
 };
 
@@ -26,11 +26,11 @@ export const loginUser: ControllerType = async (req, res, next) => {
 
     const { email } = req.body;
 
-    const currentUser = await db.userRepository.findOneBy({ email });
+    const user = await db.userRepository.findOneBy({ email });
 
     const currentUserPassword = await db.userRepository.createQueryBuilder('user').select('user.password').where('user.email = :email', { email }).getRawOne();
 
-    if (!currentUser) {
+    if (!user) {
       throw getError(StatusCodes.NOT_FOUND, config.errors.email_err);
     }
 
@@ -38,12 +38,12 @@ export const loginUser: ControllerType = async (req, res, next) => {
       throw getError(StatusCodes.FORBIDDEN, config.errors.password_err);
     }
 
-    const accessToken = generateAccessToken(currentUser.id);
+    const accessToken = generateAccessToken(user.id);
 
     delete currentUserPassword.user_password;
 
     res.json({
-      currentUser,
+      user,
       accessToken,
     });
   } catch (error) {

@@ -6,7 +6,7 @@ import { getError } from '../../utils/getCustomError';
 
 export const findUser: Handler = async (req, res, next) => {
   try {
-    const id = req.user.id;
+    const id = req.user.email;
 
     const foundUser = await db.userRepository.findOneBy({ id: +id });
 
