@@ -5,6 +5,8 @@ import { CustomError } from '../utils/CustomError';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+  // eslint-disable-next-line no-console
+  console.log(err);
   if (err instanceof CustomError) {
     return res
       .status(err.localData.status)
