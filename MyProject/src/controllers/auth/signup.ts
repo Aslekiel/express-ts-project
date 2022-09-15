@@ -17,7 +17,7 @@ type BodyType = {
 };
 
 type ResponseType = {
-  newUser: User;
+  user: User;
   accessToken: string;
 };
 
@@ -35,18 +35,18 @@ export const signUpUser: ControllerType = async (req, res, next) => {
 
     const hashedPassword = getHashedPassword(req.body.password);
 
-    const user = new User();
+    const newUser = new User();
 
-    user.email = req.body.email;
-    user.password = hashedPassword;
+    newUser.email = req.body.email;
+    newUser.password = hashedPassword;
 
-    const newUser = await db.userRepository.save(user);
+    const user = await db.userRepository.save(newUser);
 
-    const accessToken = generateAccessToken(newUser.id);
+    const accessToken = generateAccessToken(user.id);
 
     delete user.password;
 
-    res.json({ newUser, accessToken });
+    res.json({ user, accessToken });
   } catch (error) {
     next(error);
   }
