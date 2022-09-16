@@ -25,6 +25,7 @@ const config = {
     password_err: 'Wrong password entered!',
     none_user_err: 'No such user found!',
     validation_err: 'Validation error!',
+    old_password_err: 'Wrong old password entered!',
   },
 };
 

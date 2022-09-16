@@ -8,9 +8,9 @@ export const editUserInfo: Handler = async (req, res, next) => {
   try {
     const id = req.user.id;
 
-    const user = await db.userRepository.findOneBy({ id: +id });
+    const findUser = await db.userRepository.findOneBy({ id: +id });
 
-    if (!user) {
+    if (!findUser) {
       throw getError(StatusCodes.BAD_REQUEST, process.env.NO_USER);
     }
 
@@ -22,12 +22,12 @@ export const editUserInfo: Handler = async (req, res, next) => {
       throw getError(StatusCodes.BAD_REQUEST, config.errors.registration_err);
     }
 
-    user.fullname = req.body.fullname;
-    user.email = req.body.email;
+    findUser.fullname = req.body.fullname;
+    findUser.email = req.body.email;
 
-    const editUser = await db.userRepository.save(user);
+    const user = await db.userRepository.save(findUser);
 
-    res.json(editUser);
+    res.json({ user });
   } catch (error) {
     next(error);
   }
