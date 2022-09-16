@@ -11,14 +11,14 @@ export const editUserInfo: Handler = async (req, res, next) => {
     const findUser = await db.userRepository.findOneBy({ id: +id });
 
     if (!findUser) {
-      throw getError(StatusCodes.BAD_REQUEST, process.env.NO_USER);
+      throw getError(StatusCodes.BAD_REQUEST, config.errors.none_user_err);
     }
 
     const registeredEmail = await db.userRepository.findOneBy({
       email: req.body.email,
     });
 
-    if (registeredEmail.email && id !== registeredEmail.id) {
+    if (registeredEmail?.email && id !== registeredEmail.id) {
       throw getError(StatusCodes.BAD_REQUEST, config.errors.registration_err);
     }
 
