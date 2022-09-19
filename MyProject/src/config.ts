@@ -26,6 +26,7 @@ const config = {
     none_user_err: 'No such user found!',
     validation_err: 'Validation error!',
     old_password_err: 'Wrong old password entered!',
+    file_type_err: 'Only .png, .jpg and .jpeg!',
   },
 };
 

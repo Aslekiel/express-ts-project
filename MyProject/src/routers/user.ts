@@ -4,6 +4,7 @@ import { deleteUser } from '../controllers/user/delete';
 import { editPassword } from '../controllers/user/editPassword';
 import { editUserInfo } from '../controllers/user/editUserInfo';
 import { findUser } from '../controllers/user/findOne';
+import { uploadAvatar } from '../controllers/user/uploadAvatar';
 import { authenticateJWT } from '../middlewares/authenticateJWT';
 import { validateSchema } from '../middlewares/validateSchema';
 import { userEditInfoSchema } from '../schemas/userEditInfoSchema';
@@ -18,5 +19,6 @@ userRouter.get('/', validateSchema(userSchema), findUser);
 userRouter.patch('/password', validateSchema(userEditPasswordSchema), editPassword);
 userRouter.patch('/info', validateSchema(userEditInfoSchema), editUserInfo);
 userRouter.delete('/', validateSchema(userSchema), deleteUser);
+userRouter.post('/upload', uploadAvatar);
 
 export default userRouter;
