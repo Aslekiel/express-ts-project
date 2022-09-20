@@ -1,6 +1,7 @@
 import { AppDataSource } from './db/DataSource';
 import app from './app';
 import config from './config';
+import 'reflect-metadata';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import types from './types';
 

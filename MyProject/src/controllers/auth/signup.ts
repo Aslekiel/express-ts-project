@@ -4,7 +4,7 @@ import { StatusCodes } from 'http-status-codes';
 import * as yup from 'yup';
 import config from '../../config';
 import db from '../../db';
-import { User } from '../../db/entity/User';
+import { User } from '../../db/entities/User';
 import { generateAccessToken } from '../../utils/generateAccessToken';
 import { getError } from '../../utils/getCustomError';
 import { getHashedPassword } from '../../utils/hashPassword';

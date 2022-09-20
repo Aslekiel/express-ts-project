@@ -9,7 +9,7 @@ export const AppDataSource = new DataSource({
   username: config.db.username,
   password: config.db.password,
   database: config.db.database,
-  entities: [`${__dirname}/entity/*`],
+  entities: [`${__dirname}/entities/*`],
   synchronize: true,
   logging: false,
 });

@@ -1,4 +1,4 @@
-import type { User } from './db/entity/User';
+import type { User } from './db/entities/User';
 
 declare global {
   namespace Express {

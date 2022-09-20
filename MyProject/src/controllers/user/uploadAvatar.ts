@@ -22,7 +22,9 @@ export const uploadAvatar: Handler = async (req, res, next) => {
 
     const avatar = req.body.avatar;
 
-    const avatarName = `${Date.now()}.jpg`;
+    const avatarExtension = avatar.substring('data:image/'.length, avatar.indexOf(';base64'));
+
+    const avatarName = `${Date.now()}.${avatarExtension}`;
 
     const path = `static/${avatarName}`;
 

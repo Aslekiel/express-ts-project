@@ -11,6 +11,7 @@ module.exports = {
     SharedArrayBuffer: 'readonly',
   },
   parserOptions: {
+    createDefaultProgram: true,
     ecmaVersion: 2018,
     project: ['./tsconfig.json', 'tsconfig.eslint.json'],
   },
