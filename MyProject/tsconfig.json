@@ -1,5 +1,6 @@
 {
    "compilerOptions": {
+     "baseUrl": "./src",
      "lib": ["es5", "es6"],
      "target": "es5",
      "module": "commonjs",
@@ -11,5 +12,5 @@
      "esModuleInterop": true,
      "typeRoots": ["src/@types", "./node_modules/@types"]
    },
-   "include": ["src/**/*", "node_modules/@types/express"],
+   "include": ["./src/**/*", "node_modules/@types/express", "createBooks.ts", "createBooks.ts", "someFile.ts"],
  }

@@ -11,14 +11,17 @@ export class Book {
   @Column({ type: 'varchar', nullable: false, length: 255 })
   author: string;
 
-  @Column({ type: 'varchar', nullable: true, length: 255 })
+  @Column({ type: 'varchar', nullable: false, length: 255 })
+  genre: string;
+
+  @Column({ type: 'varchar', nullable: true, length: 2550 })
   description: string;
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
   logo: string;
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
-  rating: number;
+  rating: string;
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
   comments: string;
