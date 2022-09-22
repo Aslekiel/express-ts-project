@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Genre } from './Genre';
 
 @Entity()
 export class Book {
@@ -11,8 +12,9 @@ export class Book {
   @Column({ type: 'varchar', nullable: false, length: 255 })
   author: string;
 
-  @Column({ type: 'varchar', nullable: false, length: 255 })
-  genre: string;
+  @ManyToMany(() => Genre)
+  @JoinTable()
+  genres: Genre[];
 
   @Column({ type: 'varchar', nullable: true, length: 2550 })
   description: string;
@@ -27,7 +29,7 @@ export class Book {
   comments: string;
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
-  price: string;
+  price: number;
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
   dateOfIssue: string;
