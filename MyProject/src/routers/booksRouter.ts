@@ -7,6 +7,6 @@ const booksRouter = express.Router();
 
 booksRouter.get('/', getAllBooks);
 booksRouter.get('/genres', getAllGenres);
-booksRouter.get('/filter', getFilteredArrayOfBooks);
+booksRouter.post('/filter', getFilteredArrayOfBooks);
 
 export default booksRouter;
