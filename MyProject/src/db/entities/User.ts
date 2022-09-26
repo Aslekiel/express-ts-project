@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Cart } from './Cart';
 
 @Entity()
@@ -19,6 +19,5 @@ export class User {
   avatar: string;
 
   @OneToOne(() => Cart, (cart) => cart.user)
-  @JoinColumn()
   cart: Cart;
 }

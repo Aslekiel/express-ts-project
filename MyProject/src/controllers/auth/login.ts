@@ -29,10 +29,10 @@ export const loginUser: ControllerType = async (req, res, next) => {
     const user = await db.userRepository.findOneBy({ email });
 
     const currentUserPassword = await db.userRepository
-    .createQueryBuilder('user')
-    .select('user.password')
-    .where('user.email = :email', { email })
-    .getRawOne();
+      .createQueryBuilder('user')
+      .select('user.password')
+      .where('user.email = :email', { email })
+      .getRawOne();
 
     if (!user) {
       throw getError(StatusCodes.NOT_FOUND, config.errors.email_err);

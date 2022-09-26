@@ -16,7 +16,11 @@ export const editPassword: Handler = async (req, res, next) => {
     }
 
     const oldPassword = getHashedPassword(req.body.oldPassword);
-    const currentUserPassword = await db.userRepository.createQueryBuilder('findUser').select('findUser.password').where('findUser.id = :id', { id }).getRawOne();
+    const currentUserPassword = await db.userRepository
+      .createQueryBuilder('findUser')
+      .select('findUser.password')
+      .where('findUser.id = :id', { id })
+      .getRawOne();
 
     if (oldPassword !== currentUserPassword.findUser_password) {
       throw getError(StatusCodes.BAD_REQUEST, config.errors.old_password_err);

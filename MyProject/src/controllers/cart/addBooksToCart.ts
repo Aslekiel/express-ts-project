@@ -1,16 +1,16 @@
-import jwt from 'jsonwebtoken';
-import { Cart } from './../../db/entities/Cart';
 import type { Handler } from 'express';
+import { StatusCodes } from 'http-status-codes';
+import { User } from 'db/entities/User';
+import { Cart } from '../../db/entities/Cart';
 import db from '../../db';
 import { getError } from '../../utils/getCustomError';
-import { StatusCodes } from 'http-status-codes';
 import config from '../../config';
 
 export const addBooksToCart: Handler = async (req, res, next) => {
   try {
-    const { user } = req;
+    const id = req.user.id;
 
-    console.log(user);
+    const user = await db.userRepository.findOneBy({ id: +id });
 
     if (!user) {
       throw getError(StatusCodes.BAD_REQUEST, config.errors.none_user_err);
@@ -20,27 +20,28 @@ export const addBooksToCart: Handler = async (req, res, next) => {
 
     const book = await db.books.findOneBy({ id: bookId });
 
-    const carts = await db.cart.createQueryBuilder("cart")
-    .leftJoinAndSelect("cart.user", "user")
-    .getMany()
+    const findCart = await db.cart
+      .createQueryBuilder('cart')
+      .innerJoinAndSelect('cart.books', 'books')
+      .innerJoin('cart.user', 'user')
+      .where({ id: user.id })
+      .getOne();
 
-    console.log(carts);
+    if (!findCart) {
+      const cart = new Cart();
 
-    if (!user.cart) {
-        const newCart = new Cart();
-        newCart.books = [book];
+      cart.books.push(book);
 
-        const cart = await db.cart.save(newCart);
-        user.cart = cart;
+      cart.user = user;
 
-        res.json({ user });
+      await db.cart.save(cart);
+
+      res.json({ user });
     }
 
-    // const booksInCart = [];
+    findCart.books = [...findCart.books, book];
 
-    user.cart.books = [...user.cart.books, book];
-
-    // console.log(user.cart?.books);
+    await db.cart.save(findCart);
 
     res.json({ user });
   } catch (error) {

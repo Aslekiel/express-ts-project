@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Cart } from './Cart';
 import { Genre } from './Genre';
 
@@ -34,8 +34,4 @@ export class Book {
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
   dateOfIssue: string;
-
-  @ManyToOne(() => Cart, cart => cart.books)
-  @JoinColumn()
-  cart: Cart;
 }
