@@ -6,7 +6,7 @@ export const getFilteredArrayOfBooks: Handler = async (req, res, next) => {
     const filters = req.body;
 
     const books = await db.books.createQueryBuilder('books')
-      .innerJoinAndSelect('books.genres', 'genres', 'genres.name IN (:...filters)', { filters })
+      .innerJoinAndSelect('books.genres', 'genres', 'genres.id IN (:...filters)', { filters })
       .getMany();
 
     res.json({ books });

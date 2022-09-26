@@ -1,11 +1,10 @@
 import type { Handler } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { Cart } from '../../db/entities/Cart';
 import db from '../../db';
 import { getError } from '../../utils/getCustomError';
 import config from '../../config';
 
-export const addBooksToCart: Handler = async (req, res, next) => {
+export const getBooksFromCart: Handler = async (req, res, next) => {
   try {
     const id = req.user.id;
 
@@ -15,10 +14,6 @@ export const addBooksToCart: Handler = async (req, res, next) => {
       throw getError(StatusCodes.BAD_REQUEST, config.errors.none_user_err);
     }
 
-    const { bookId } = req.body;
-
-    const book = await db.books.findOneBy({ id: bookId });
-
     const findCart = await db.cart
       .createQueryBuilder('cart')
       .innerJoinAndSelect('cart.books', 'books')
@@ -26,26 +21,9 @@ export const addBooksToCart: Handler = async (req, res, next) => {
       .where({ id: user.id })
       .getOne();
 
-    if (!findCart) {
-      const cart = new Cart();
+    const books = findCart.books;
 
-      const booksArray = [];
-      booksArray.push(book);
-
-      cart.books = booksArray;
-
-      cart.user = user;
-
-      await db.cart.save(cart);
-
-      res.json({ user });
-    }
-
-    findCart.books = [...findCart.books, book];
-
-    await db.cart.save(findCart);
-
-    res.json({ user });
+    res.json({ books });
   } catch (error) {
     next(error);
   }
