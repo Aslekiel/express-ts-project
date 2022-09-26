@@ -23,8 +23,8 @@ export class Book {
   @Column({ type: 'varchar', nullable: true, length: 255 })
   logo: string;
 
-  @Column({ type: 'varchar', nullable: true, length: 255 })
-  rating: string;
+  @Column({ type: 'float', nullable: true })
+  rating: number;
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
   comments: string;

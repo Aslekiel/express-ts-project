@@ -1,5 +1,7 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Cart } from './Cart';
+import { Favorite } from './Favorite';
+import { Rating } from './Rating';
 
 @Entity()
 export class User {
@@ -18,6 +20,13 @@ export class User {
   @Column({ type: 'varchar', nullable: true, length: 255 })
   avatar: string;
 
-  @OneToOne(() => Cart, (cart) => cart.user)
-  cart: Cart;
+  @OneToMany(() => Cart, (cart) => cart.user)
+  cart: Cart[];
+
+  @OneToMany(() => Favorite, (favorite) => favorite.user, { cascade: true })
+  @JoinTable()
+  favorites: Favorite[];
+
+  @OneToMany(() => Rating, (rating) => rating.user, { cascade: true })
+  ratings: Rating[];
 }

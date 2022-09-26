@@ -1,4 +1,4 @@
-import { Entity, JoinColumn, JoinTable, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, JoinTable, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Book } from './Book';
 import { User } from './User';
 
@@ -7,11 +7,20 @@ export class Cart {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToMany(() => Book)
+  @ManyToOne(() => Book)
   @JoinTable()
   books: Book[];
 
-  @OneToOne(() => User, (user) => user.cart, { cascade: true })
+  @ManyToOne(() => User, (user) => user.cart, { cascade: true })
   @JoinColumn()
   user: User;
+
+  @Column({ type: 'integer', nullable: false })
+  bookId: number;
+
+  @Column({ type: 'integer', nullable: false })
+  userId: number;
+
+  @Column({ type: 'integer', nullable: false, default: 1 })
+  count: number;
 }
