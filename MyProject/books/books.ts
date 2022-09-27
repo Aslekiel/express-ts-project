@@ -186,4 +186,15 @@ export const booksArray = [
     price: 3.85,
     dateOfIssue: '2019',
   },
+    {
+    title: 'Gideon the Ninth',
+    author: 'Tamsyn Muir',
+    genres: ['Action & Adventure Fiction', 'Fantasy', 'Horror'],
+    description: 'Brought up by unfriendly, ossifying nuns, ancient retainers, and countless skeletons, Gideon is ready to abandon a life of servitude and an afterlife as a reanimated corpse. She packs up her sword, her shoes, and her dirty magazines, and prepares to launch her daring escape. But her childhood nemesis won`t set her free without a service. Harrowhark Nonagesimus, Reverend Daughter of the Ninth House and bone witch extraordinaire, has been summoned into action. The Emperor has invited the heirs to each of his loyal Houses to a deadly trial of wits and skill. If Harrowhark succeeds she will become an immortal, all-powerful servant of the Resurrection, but no necromancer can ascend without their cavalier. Without Gideons sword, Harrow will fail, and the Ninth House will die.',
+    logo: 'http://localhost:5000/booksLogo/Gideon the Ninth.jpg',
+    rating: 4.0,
+    comments: '',
+    price: 19.43,
+    dateOfIssue: '2019',
+  },
 ];
