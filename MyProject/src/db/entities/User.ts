@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Cart } from './Cart';
 import { Favorite } from './Favorite';
 import { Rating } from './Rating';
@@ -24,7 +24,7 @@ export class User {
   cart: Cart[];
 
   @OneToMany(() => Favorite, (favorite) => favorite.user, { cascade: true })
-  @JoinTable()
+  @JoinColumn()
   favorites: Favorite[];
 
   @OneToMany(() => Rating, (rating) => rating.user, { cascade: true })

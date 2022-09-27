@@ -1,5 +1,4 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
-import { Cart } from './Cart';
+import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Genre } from './Genre';
 
 @Entity()

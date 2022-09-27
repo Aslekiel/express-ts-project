@@ -26,7 +26,13 @@ export const loginUser: ControllerType = async (req, res, next) => {
 
     const { email } = req.body;
 
-    const user = await db.userRepository.findOneBy({ email });
+    const user = await db.userRepository
+      .findOne(
+        {
+          relations: { cart: true, favorites: true, ratings: true },
+          where: { email },
+        },
+      );
 
     const currentUserPassword = await db.userRepository
       .createQueryBuilder('user')

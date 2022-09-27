@@ -3,6 +3,7 @@ import { StatusCodes } from 'http-status-codes';
 import db from '../../db';
 import { getError } from '../../utils/getCustomError';
 import config from '../../config';
+import { Cart } from '../../db/entities/Cart';
 
 export const deleteFromCart: Handler = async (req, res, next) => {
   try {
@@ -16,18 +17,27 @@ export const deleteFromCart: Handler = async (req, res, next) => {
 
     const { bookId } = req.body;
 
-    const findCart = await db.cart
-      .createQueryBuilder('cart')
-      .innerJoinAndSelect('cart.books', 'books')
-      .innerJoin('cart.user', 'user')
-      .where({ id: user.id })
-      .getOne();
+    await db.cart
+      .createQueryBuilder()
+      .delete()
+      .from(Cart)
+      .where('userId = :id', { id: user.id })
+      .andWhere('bookId = :bookId', { bookId })
+      .execute();
 
-    findCart.books = findCart.books.filter((book) => book.id !== bookId);
+    const userCarts = await db.cart.find({ where: { userId: user.id } });
 
-    await db.cart.save(findCart);
+    const booksIdsFromCart = userCarts.map((book) => book.bookId);
 
-    const books = findCart.books;
+    if (userCarts.length > 0) {
+      const books = await db.books.createQueryBuilder('books')
+        .where('books.id IN (:...booksIdsFromCart)', { booksIdsFromCart })
+        .getMany();
+
+      return res.json({ books });
+    }
+
+    const books = [];
 
     res.json({ books });
   } catch (error) {

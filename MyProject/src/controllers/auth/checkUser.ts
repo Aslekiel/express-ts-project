@@ -14,7 +14,13 @@ export const checkUser: Handler = async (req, res, next) => {
       id: number;
     };
 
-    const user = await db.userRepository.findOneBy({ id: payload.id });
+    const user = await db.userRepository
+      .findOne(
+        {
+          relations: { cart: true, favorites: true, ratings: true },
+          where: { id: payload.id },
+        },
+      );
 
     if (!user) {
       throw getError(StatusCodes.BAD_REQUEST, config.errors.none_user_err);

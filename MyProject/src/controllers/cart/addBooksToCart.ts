@@ -1,15 +1,15 @@
 import type { Handler } from 'express';
 import { StatusCodes } from 'http-status-codes';
-import { Cart } from '../../db/entities/Cart';
 import db from '../../db';
 import { getError } from '../../utils/getCustomError';
 import config from '../../config';
+import { Cart } from '../../db/entities/Cart';
 
 export const addBooksToCart: Handler = async (req, res, next) => {
   try {
     const id = req.user.id;
 
-    const user = await db.userRepository.findOneBy({ id: +id });
+    const user = await db.userRepository.findOne({ relations: { cart: true }, where: { id: +id } });
 
     if (!user) {
       throw getError(StatusCodes.BAD_REQUEST, config.errors.none_user_err);
@@ -19,33 +19,33 @@ export const addBooksToCart: Handler = async (req, res, next) => {
 
     const book = await db.books.findOneBy({ id: bookId });
 
-    const findCart = await db.cart
-      .createQueryBuilder('cart')
-      .innerJoinAndSelect('cart.books', 'books')
-      .innerJoin('cart.user', 'user')
-      .where({ id: user.id })
-      .getOne();
+    const booksIdsFromCart = user.cart.map((cart) => cart.bookId);
 
-    if (!findCart) {
-      const cart = new Cart();
+    if (booksIdsFromCart.includes(bookId)) {
+      await db.cart
+        .createQueryBuilder()
+        .update(Cart)
+        .set({
+          count: () => 'count + 1',
+        })
+        .where('userId = :id', { id: user.id })
+        .andWhere('bookId = :bookId', { bookId })
+        .execute();
 
-      const booksArray = [];
-      booksArray.push(book);
+      const userCarts = await db.cart.find({ where: { userId: user.id } });
 
-      cart.books = booksArray;
-
-      cart.user = user;
-
-      await db.cart.save(cart);
-
-      res.json({ user });
+      return res.json({ cart: userCarts });
     }
 
-    findCart.books = [...findCart.books, book];
+    const cart = new Cart();
+    cart.books = book;
+    cart.user = user;
 
-    await db.cart.save(findCart);
+    await db.cart.save(cart);
 
-    res.json({ user });
+    const userCarts = await db.cart.find({ where: { userId: user.id } });
+
+    res.json({ cart: userCarts });
   } catch (error) {
     next(error);
   }

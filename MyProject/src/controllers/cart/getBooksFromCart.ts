@@ -14,14 +14,19 @@ export const getBooksFromCart: Handler = async (req, res, next) => {
       throw getError(StatusCodes.BAD_REQUEST, config.errors.none_user_err);
     }
 
-    const findCart = await db.cart
-      .createQueryBuilder('cart')
-      .innerJoinAndSelect('cart.books', 'books')
-      .innerJoin('cart.user', 'user')
-      .where({ id: user.id })
-      .getOne();
+    const userCarts = await db.cart.find({ where: { userId: user.id } });
 
-    const books = findCart.books;
+    const booksIdsFromCart = userCarts.map((book) => book.bookId);
+
+    if (userCarts.length > 0) {
+      const books = await db.books.createQueryBuilder('books')
+        .where('books.id IN (:...booksIdsFromCart)', { booksIdsFromCart })
+        .getMany();
+
+      return res.json({ books });
+    }
+
+    const books = [];
 
     res.json({ books });
   } catch (error) {

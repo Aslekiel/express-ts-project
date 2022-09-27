@@ -40,7 +40,15 @@ export const signUpUser: ControllerType = async (req, res, next) => {
     newUser.email = req.body.email;
     newUser.password = hashedPassword;
 
-    const user = await db.userRepository.save(newUser);
+    const saveUser = await db.userRepository.save(newUser);
+
+    const user = await db.userRepository
+      .findOne(
+        {
+          relations: { cart: true, favorites: true, ratings: true },
+          where: { id: saveUser.id },
+        },
+      );
 
     const accessToken = generateAccessToken(user.id);
 
