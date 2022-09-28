@@ -1,5 +1,6 @@
 import { Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Cart } from './Cart';
+import { Comment } from './Comment';
 import { Favorite } from './Favorite';
 import { Rating } from './Rating';
 
@@ -29,4 +30,7 @@ export class User {
 
   @OneToMany(() => Rating, (rating) => rating.user, { cascade: true })
   ratings: Rating[];
+
+  @OneToMany(() => Comment, (comment) => comment.user)
+  comment: Comment[];
 }

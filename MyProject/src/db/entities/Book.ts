@@ -22,8 +22,8 @@ export class Book {
   @Column({ type: 'varchar', nullable: true, length: 255 })
   logo: string;
 
-  @Column({ type: 'float', nullable: true })
-  rating: number;
+  @Column({ type: 'varchar', nullable: true })
+  rating: string;
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
   comments: string;
