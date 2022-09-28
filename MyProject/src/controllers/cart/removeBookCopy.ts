@@ -5,7 +5,7 @@ import { getError } from '../../utils/getCustomError';
 import config from '../../config';
 import { Cart } from '../../db/entities/Cart';
 
-export const addBooksToCart: Handler = async (req, res, next) => {
+export const removeBookCopy: Handler = async (req, res, next) => {
   try {
     const id = req.user.id;
 
@@ -17,17 +17,23 @@ export const addBooksToCart: Handler = async (req, res, next) => {
 
     const { bookId } = req.body;
 
-    const book = await db.books.findOneBy({ id: bookId });
+    const booksIdsFromCart = user.cart.map((cart) => cart.bookId);
 
-    const cart = new Cart();
-    cart.books = book;
-    cart.user = user;
+    if (booksIdsFromCart.includes(bookId)) {
+      await db.cart
+        .createQueryBuilder()
+        .update(Cart)
+        .set({
+          count: () => 'count - 1',
+        })
+        .where('userId = :id', { id: user.id })
+        .andWhere('bookId = :bookId', { bookId })
+        .execute();
 
-    await db.cart.save(cart);
+      const userCarts = await db.cart.find({ where: { userId: user.id } });
 
-    const userCarts = await db.cart.find({ where: { userId: user.id } });
-
-    res.json({ cart: userCarts });
+      return res.json({ cart: userCarts });
+    }
   } catch (error) {
     next(error);
   }
