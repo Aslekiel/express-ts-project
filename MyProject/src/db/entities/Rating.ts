@@ -1,6 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Book } from "./Book";
-import { User } from "./User";
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Book } from './Book';
+import { User } from './User';
 
 @Entity()
 export class Rating {
@@ -17,10 +17,10 @@ export class Rating {
   grade: number;
 
   @ManyToOne(() => Book)
-  @JoinColumn()
+  @JoinColumn({ name: 'bookId', referencedColumnName: 'id' })
   book: Book;
 
   @ManyToOne(() => User)
-  @JoinColumn()
+  @JoinColumn({ name: 'userId', referencedColumnName: 'id' })
   user: User;
 }
