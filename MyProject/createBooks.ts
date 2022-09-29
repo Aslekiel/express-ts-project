@@ -53,7 +53,6 @@ const genres = [
         description: book.description,
         logo: book.logo,
         rating: book.rating,
-        comments: book.comments,
         price: book.price,
         dateOfIssue: book.dateOfIssue,
       },

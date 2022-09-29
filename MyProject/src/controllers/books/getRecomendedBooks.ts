@@ -5,8 +5,11 @@ export const getRecomendedBooks: Handler = async (req, res, next) => {
   try {
     const { id } = req.body;
 
-    const book = await db.books.findOne({ relations: { genres: true }, where: { id } });
-    // const genres = await db.genre.find({ where: { id } });
+    const book = await db.books
+      .findOne({
+        relations: { genres: true, comments: true },
+        where: { id },
+      });
 
     const genresIds = book.genres.map((genre) => genre.id);
 

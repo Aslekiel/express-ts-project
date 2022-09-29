@@ -1,5 +1,6 @@
 import express from 'express';
 
+import { findAnotherUserById } from '../controllers/user/findAnotherUserById';
 import { deleteUser } from '../controllers/user/delete';
 import { editPassword } from '../controllers/user/editPassword';
 import { editUserInfo } from '../controllers/user/editUserInfo';
@@ -12,6 +13,8 @@ import { userEditPasswordSchema } from '../schemas/userEditPasswordSchema';
 import { userSchema } from '../schemas/userSchema';
 
 const userRouter = express.Router();
+
+userRouter.post('/find-another', findAnotherUserById);
 
 userRouter.use(authenticateJWT);
 

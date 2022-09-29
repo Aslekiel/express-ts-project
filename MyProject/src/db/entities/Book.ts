@@ -1,4 +1,5 @@
-import { Column, Entity, JoinTable, ManyToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Comment } from './Comment';
 import { Genre } from './Genre';
 
 @Entity()
@@ -26,11 +27,11 @@ export class Book {
   rating: string;
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
-  comments: string;
-
-  @Column({ type: 'varchar', nullable: true, length: 255 })
   price: number;
 
   @Column({ type: 'varchar', nullable: true, length: 255 })
   dateOfIssue: string;
+
+  @OneToMany(() => Comment, (comment) => comment.books)
+  comments: Comment[];
 }
