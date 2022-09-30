@@ -3,8 +3,8 @@ import { getBooksFromCart } from '../controllers/cart/getBooksFromCart';
 import { authenticateJWT } from '../middlewares/authenticateJWT';
 import { addBooksToCart } from '../controllers/cart/addBooksToCart';
 import { deleteFromCart } from '../controllers/cart/deleteFromCart';
-import { addBookCopy } from '../controllers/cart/addBookCopy';
-import { removeBookCopy } from '../controllers/cart/removeBookCopy';
+import { reduceBookAmount } from '../controllers/cart/reduceBookAmount';
+import { increaseBookAmount } from '../controllers/cart/increaseBookAmount';
 
 const cartRouter = express.Router();
 
@@ -12,8 +12,8 @@ cartRouter.use(authenticateJWT);
 
 cartRouter.post('/add', addBooksToCart);
 cartRouter.get('/', getBooksFromCart);
-cartRouter.post('/delete', deleteFromCart);
-cartRouter.post('/add-copy', addBookCopy);
-cartRouter.post('/remove-copy', removeBookCopy);
+cartRouter.delete('/', deleteFromCart);
+cartRouter.patch('/', increaseBookAmount);
+cartRouter.patch('/reduce', reduceBookAmount);
 
 export default cartRouter;

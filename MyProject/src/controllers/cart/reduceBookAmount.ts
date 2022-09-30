@@ -5,7 +5,7 @@ import { getError } from '../../utils/getCustomError';
 import config from '../../config';
 import { Cart } from '../../db/entities/Cart';
 
-export const removeBookCopy: Handler = async (req, res, next) => {
+export const reduceBookAmount: Handler = async (req, res, next) => {
   try {
     const id = req.user.id;
 
