@@ -10,7 +10,7 @@ const cartRouter = express.Router();
 
 cartRouter.use(authenticateJWT);
 
-cartRouter.post('/add', addBooksToCart);
+cartRouter.post('/', addBooksToCart);
 cartRouter.get('/', getBooksFromCart);
 cartRouter.delete('/', deleteFromCart);
 cartRouter.patch('/', increaseBookAmount);

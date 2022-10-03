@@ -13,7 +13,7 @@ export class Book {
   @Column({ type: 'varchar', nullable: false, length: 255 })
   author: string;
 
-  @ManyToMany(() => Genre)
+  @ManyToMany(() => Genre, (genre) => genre.id)
   @JoinTable()
   genres: Genre[];
 
