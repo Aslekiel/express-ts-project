@@ -19,6 +19,7 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   rules: {
+    'linebreak-style': ['error', (process.platform === 'win32' ? 'windows' : 'unix')],
     'eol-last': ['error', 'always'],
     'no-plusplus': 'off',
     'operator-linebreak': [

@@ -26,9 +26,9 @@ export const deleteFavoriteBook: Handler = async (req, res, next) => {
       .andWhere('bookId = :bookId', { bookId })
       .execute();
 
-    const userFavorites = await db.favorite.find({ where: { userId: user.id } });
+    const book = await db.books.findOne({ where: { id: bookId } });
 
-    res.json(userFavorites);
+    res.json(book.id);
   } catch (error) {
     next(error);
   }

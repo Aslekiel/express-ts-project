@@ -30,9 +30,9 @@ export const increaseBookAmount: Handler = async (req, res, next) => {
         .andWhere('bookId = :bookId', { bookId })
         .execute();
 
-      const userCarts = await db.cart.find({ where: { userId: user.id } });
+      const book = await db.books.findOne({ where: { id: bookId } });
 
-      return res.json({ cart: userCarts });
+      res.json(book.id);
     }
   } catch (error) {
     next(error);
