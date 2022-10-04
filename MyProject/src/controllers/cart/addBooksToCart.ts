@@ -27,7 +27,7 @@ export const addBooksToCart: Handler = async (req, res, next) => {
 
     const userCarts = await db.cart.find({ where: { userId: user.id } });
 
-    res.json({ cart: userCarts });
+    res.json(userCarts);
   } catch (error) {
     next(error);
   }

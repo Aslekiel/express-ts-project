@@ -28,7 +28,7 @@ export const deleteFavoriteBook: Handler = async (req, res, next) => {
 
     const userFavorites = await db.favorite.find({ where: { userId: user.id } });
 
-    res.json({ favorites: userFavorites });
+    res.json(userFavorites);
   } catch (error) {
     next(error);
   }

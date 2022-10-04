@@ -23,12 +23,12 @@ export const getFavoriteBooks: Handler = async (req, res, next) => {
         .where('books.id IN (:...booksIdsFromFavorite)', { booksIdsFromFavorite })
         .getMany();
 
-      return res.json({ books });
+      return res.json(books);
     }
 
     const books = [];
 
-    res.json({ books });
+    res.json(books);
   } catch (error) {
     next(error);
   }

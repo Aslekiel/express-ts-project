@@ -25,21 +25,9 @@ export const deleteFromCart: Handler = async (req, res, next) => {
       .andWhere('bookId = :bookId', { bookId })
       .execute();
 
-    const cart = await db.cart.find({ where: { userId: user.id } });
+    const book = await db.books.findOne({ where: { id: bookId } });
 
-    const booksIdsFromCart = cart.map((book) => book.bookId);
-
-    if (cart.length > 0) {
-      const books = await db.books.createQueryBuilder('books')
-        .where('books.id IN (:...booksIdsFromCart)', { booksIdsFromCart })
-        .getMany();
-
-      return res.json({ books, user: { cart } });
-    }
-
-    const books = [];
-
-    res.json({ books, user: { cart } });
+    res.json(book.id);
   } catch (error) {
     next(error);
   }
