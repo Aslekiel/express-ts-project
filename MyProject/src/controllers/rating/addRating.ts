@@ -33,7 +33,7 @@ export const addRating: Handler = async (req, res, next) => {
         .andWhere('bookId = :bookId', { bookId })
         .execute();
 
-      const userBookRating = await db.rating.findOne({ where: { bookId } });
+      const userBookRating = await db.rating.findOne({ where: { bookId, userId: user.id } });
 
       return res.json({ bookId: userBookRating.bookId, grade: userBookRating.grade });
     }
@@ -45,7 +45,7 @@ export const addRating: Handler = async (req, res, next) => {
 
     await db.rating.save(rating);
 
-    const userBookRating = await db.rating.findOne({ where: { bookId } });
+    const userBookRating = await db.rating.findOne({ where: { bookId, userId: user.id } });
 
     res.json({ bookId: userBookRating.bookId, grade: userBookRating.grade });
   } catch (error) {
