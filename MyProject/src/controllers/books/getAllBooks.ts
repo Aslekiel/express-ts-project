@@ -49,21 +49,7 @@ export const getAllBooks: ControllerType = async (req, res, next) => {
     }
 
     if (sortBy) {
-      if (sortBy === 'price') {
-        findBooks.orderBy('books.price', 'ASC');
-      }
-      if (sortBy === 'name') {
-        findBooks.orderBy('books.title', 'ASC');
-      }
-      if (sortBy === 'author name') {
-        findBooks.orderBy('books.author', 'ASC');
-      }
-      if (sortBy === 'rating') {
-        findBooks.orderBy('books.rating', 'ASC');
-      }
-      if (sortBy === 'data of issue') {
-        findBooks.orderBy('books.dateOfIssue', 'ASC');
-      }
+      findBooks.orderBy(`books.${sortBy}`, 'ASC');
     }
 
     const books = await findBooks

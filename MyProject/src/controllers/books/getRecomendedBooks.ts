@@ -17,9 +17,12 @@ export const getRecomendedBooks: Handler = async (req, res, next) => {
       .innerJoinAndSelect('books.genres', 'genres', 'genres.id IN (:...genresIds)', { genresIds })
       .getMany();
 
-    const books = findBooks.filter((book) => book.id !== id).slice(0, 4);
+    const books = findBooks
+      .filter((book) => book.id !== id)
+      .sort(() => Math.random() - 0.5)
+      .slice(0, 4);
 
-    res.json({ books });
+    res.json(books);
   } catch (error) {
     next(error);
   }

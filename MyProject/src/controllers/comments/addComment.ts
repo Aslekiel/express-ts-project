@@ -20,18 +20,18 @@ export const addComment: Handler = async (req, res, next) => {
 
     const { bookId, userComment } = req.body;
 
-    const book = await db.books.findOneBy({ id: bookId });
+    const findBook = await db.books.findOneBy({ id: bookId });
 
     const comment = new Comment();
-    comment.books = book;
+    comment.books = findBook;
     comment.user = user;
     comment.comment = userComment;
 
     await db.comment.save(comment);
 
-    const bookComments = await db.comment.find({ where: { userId: user.id } });
+    const bookComments = await db.comment.find({ where: { userId: user.id, bookId } });
 
-    res.json({ comments: bookComments });
+    res.json(bookComments);
   } catch (error) {
     next(error);
   }
