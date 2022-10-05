@@ -25,7 +25,15 @@ export const editUserInfo: Handler = async (req, res, next) => {
     findUser.fullname = req.body.fullname;
     findUser.email = req.body.email;
 
-    const user = await db.userRepository.save(findUser);
+    await db.userRepository.save(findUser);
+
+    const user = await db.userRepository
+      .findOne(
+        {
+          relations: { cart: true, favorites: true, ratings: true },
+          where: { id },
+        },
+      );
 
     res.json({ user });
   } catch (error) {

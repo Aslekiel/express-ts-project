@@ -22,16 +22,19 @@ export const addComment: Handler = async (req, res, next) => {
 
     const findBook = await db.books.findOneBy({ id: bookId });
 
-    const comment = new Comment();
-    comment.books = findBook;
-    comment.user = user;
-    comment.comment = userComment;
+    const newComment = new Comment();
+    newComment.books = findBook;
+    newComment.user = user;
+    newComment.comment = userComment;
 
-    await db.comment.save(comment);
+    const comment = await db.comment.save(newComment);
 
-    const bookComments = await db.comment.find({ where: { userId: user.id, bookId } });
-
-    res.json(bookComments);
+    res.json({
+      id,
+      fullname: comment.user.fullname,
+      avatar: comment.user.avatar,
+      comment: comment.comment,
+    });
   } catch (error) {
     next(error);
   }

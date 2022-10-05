@@ -1,20 +1,21 @@
 import type { Handler } from 'express';
-import { StatusCodes } from 'http-status-codes';
-import config from '../../config';
 import db from '../../db';
-import { getError } from '../../utils/getCustomError';
 
-export const findAnotherUserById: Handler = async (req, res, next) => {
+export const findCommentatorsById: Handler = async (req, res, next) => {
   try {
-    const { anotherUserId } = req.body;
+    const { commentatorsIds } = req.body;
 
-    const anotherUser = await db.userRepository.findOneBy({ id: anotherUserId });
+    const commentatorsWithFullInfo = await db.userRepository.createQueryBuilder('user')
+      .where('user.id IN (:...commentatorsIds)', { commentatorsIds })
+      .getMany();
 
-    if (!anotherUser) {
-      throw getError(StatusCodes.BAD_REQUEST, config.errors.none_user_err);
-    }
+    const commentators = commentatorsWithFullInfo.map((commentator) => {
+      return {
+        id: commentator.id, fullname: commentator.fullname, avatar: commentator.avatar,
+      };
+    });
 
-    res.json({ avatar: anotherUser.avatar, fullname: anotherUser.fullname });
+    res.json(commentators);
   } catch (error) {
     next(error);
   }
